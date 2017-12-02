@@ -1,5 +1,8 @@
 #module Codebreaker
   class Game
+    CODE_LENGTH = 4
+    RANGE_OF_NUMBERS = (1..6)
+
     def initialize
     end
 
@@ -16,37 +19,30 @@
 
 
     private
+
     def generate_secret_code
-      4.times.map{ Random.rand(1..6) }
+      CODE_LENGTH.times.map{ Random.rand(RANGE_OF_NUMBERS) }
     end
 
     def mark(guess_code)
-      copy_secret_code = @secret_code
-      pluses_arr, copy_secret_code = mark_pluses(guess_code, copy_secret_code)
-      minuses_arr, copy_secret_code = mark_minuses(guess_code, copy_secret_code)
-      result = pluses_arr + minuses_arr
+      secret_code, guess_code = remove_bulls(guess_code)
+      pluses_numb = CODE_LENGTH - secret_code.length
+      minuses_numb = count_minuses(guess_code, secret_code)
+      result = pluses_numb + minuses_numb
     end
 
-    def mark_pluses(guess_code, copy_secret_code)
-      result = []
-      @secret_code.each_with_index do |x, index|
-        if x == guess_code[index]
-          result << '+'
-          copy_secret_code -= [x]
-        end
-      end
-      [result, copy_secret_code]
+    def remove_bulls(guess_code)
+      secret_code = @secret_code
+      secret_code, guess_code = @secret_code.zip(guess_code).reject\
+       { |s, g| s == g }.transpose
+      [secret_code, guess_code]
     end
 
-    def mark_minuses(guess_code, copy_secret_code)
-      result = []
-      guess_code.each do |x|
-        if copy_secret_code.include?(x)
-          result << '-'
-          copy_secret_code -= [x]
-        end
+    def count_minuses(guess_code, secret_code)
+      guess_code.count do |x|
+        index = secret_code.find_index(x)
+        secret_code.delete_at(index) if index
       end
-      [result, copy_secret_code]
     end
 
   end

@@ -62,6 +62,11 @@ module Codebreaker
         @game.instance_variable_set(:@secret_code, [1, 3, 3, 4])
         expect(@game.send(:mark, [5, 6, 3, 6])).to eq(['+'])
       end
+
+      it 'codebreaker' do
+        @game.instance_variable_set(:@secret_code, [1, 2, 3, 2])
+        expect(@game.send(:mark, [2, 5, 2, 5])).to eq(['--'])
+      end
     end
   end
 end
