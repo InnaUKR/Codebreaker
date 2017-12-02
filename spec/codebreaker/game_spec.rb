@@ -18,7 +18,7 @@ module Codebreaker
       it 'saves secret code with numbers from 1 to 6' do
         game = Game.new
         game.start
-        expect(game.instance_variable_get(:@secret_code)).to all( (be >= 1).and be <= 7 )
+        expect(game.instance_variable_get(:@secret_code)).to all((be >= 1).and(be <= 7))
       end
     end
 
@@ -33,7 +33,7 @@ module Codebreaker
       end
 
       it 'codebreaker guess numbers but not order' do
-        expect(@game.send(:mark, [4, 3, 2, 1])).to eq(['-', '-', '-','-'])
+        expect(@game.send(:mark, [4, 3, 2, 1])).to eq(['-', '-', '-', '-'])
       end
 
       it 'codebreaker guess 3 numbers and them order' do
