@@ -21,16 +21,21 @@ class Game
   end
 
   def mark(guess_code)
+    pluses_numb, secret_code, guess_code = count_pluses(guess_code)
+    minuses_numb = count_minuses(guess_code, secret_code)
+    [pluses_numb, minuses_numb]
+  end
+
+  def count_pluses(guess_code)
     secret_code, guess_code = remove_bulls(guess_code)
     pluses_numb = CODE_LENGTH - secret_code.length
-    minuses_numb = count_minuses(guess_code, secret_code)
-    pluses_numb + minuses_numb
+    [pluses_numb, secret_code, guess_code]
   end
 
   def remove_bulls(guess_code)
     secret_code, guess_code = @secret_code.zip(guess_code).reject\
      { |s, g| s == g }.transpose
-    [secret_code, guess_code]
+    [secret_code.to_a, guess_code.to_a]
   end
 
   def count_minuses(guess_code, secret_code)
