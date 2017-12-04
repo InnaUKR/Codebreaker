@@ -20,7 +20,7 @@ class Console < UI
   end
 
   def take_hint?
-    p ask_phrase(:hint_message) == 'y'
+    ask_phrase(:hint_message) == 'y'
   end
 
   def save?

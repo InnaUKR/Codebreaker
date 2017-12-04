@@ -2,11 +2,11 @@ require 'spec_helper'
 
 module Codebreaker
   RSpec.describe Game do
-    let(:game){Game.new}
+    let(:game) { Game.new }
 
-    describe '#start' do
-      before(:each){ game.send(:generate_secret_code) }
-      it 'generates secret code' do
+    describe '#generates secret code' do
+      before(:each) { game.send(:generate_secret_code) }
+      it 'generates not empty secret code' do
         expect(game.instance_variable_get(:@secret_code)).not_to be_empty
       end
 
@@ -21,7 +21,7 @@ module Codebreaker
 
     describe '#count_pluses' do
       context 'usual situations' do
-        before(:each){ game.instance_variable_set(:@secret_code, [1, 2, 3, 4])}
+        before(:each) { game.instance_variable_set(:@secret_code, [1, 2, 3, 4]) }
 
         it 'codebreaker wins' do
           expect(game.send(:count_pluses, [1, 2, 3, 4]).first).to eq(4)
@@ -50,7 +50,7 @@ module Codebreaker
 
     describe '#count_minuses' do
       context 'usual situations' do
-        let(:secret_code){[1, 2, 3, 4]}
+        let(:secret_code) { [1, 2, 3, 4] }
 
         it 'codebreaker guess numbers but not order' do
           expect(game.send(:count_minuses, [4, 3, 2, 1], secret_code)).to eq(4)
@@ -77,7 +77,7 @@ module Codebreaker
     end
 
     describe '#mark' do
-      before(:each){ game.instance_variable_set(:@secret_code, [1, 2, 3, 4]) }
+      before(:each) { game.instance_variable_set(:@secret_code, [1, 2, 3, 4]) }
 
       it 'codebreaker guess 4 cow and 0 bulls' do
         expect(game.send(:mark, [1, 2, 3, 4])).to eq([4, 0])

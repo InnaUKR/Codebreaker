@@ -19,7 +19,7 @@ class UI
     raise 'Abstract method called.'
   end
 
-  def show_hint(hint)
+  def show_hint(_hint)
     raise 'Abstract method called.'
   end
 
@@ -27,11 +27,11 @@ class UI
     raise 'Abstract method called.'
   end
 
-  def show_info(attempts_numb, hints_numb)
+  def show_info(_attempts_numb, _hints_numb)
     raise 'Abstract method called.'
   end
 
-  def show_result(pluses_numb, minuses_numb)
+  def show_result(_pluses_numb, _minuses_numb)
     raise 'Abstract method called.'
   end
 

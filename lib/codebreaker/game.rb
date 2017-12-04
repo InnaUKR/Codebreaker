@@ -102,7 +102,7 @@ class Game
   end
 
   def remove_bulls(guess_code)
-    secret_code, guess_code = @secret_code.zip(guess_code).reject{ |s, g| s == g }.transpose
+    secret_code, guess_code = @secret_code.zip(guess_code).reject { |s, g| s == g }.transpose
     [secret_code.to_a, guess_code.to_a]
   end
 
