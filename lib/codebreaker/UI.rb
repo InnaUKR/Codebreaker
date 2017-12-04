@@ -1,9 +1,25 @@
 class UI
-  def show_sentence(_parameter)
+  def play_again?
     raise 'Abstract method called.'
   end
 
-  def ask_phrase(_parameter)
+  def take_hint?
+    raise 'Abstract method called.'
+  end
+
+  def save?
+    raise 'Abstract method called.'
+  end
+
+  def ask_name
+    raise 'Abstract method called.'
+  end
+
+  def make_guess
+    raise 'Abstract method called.'
+  end
+
+  def show_hint(hint)
     raise 'Abstract method called.'
   end
 
@@ -11,15 +27,19 @@ class UI
     raise 'Abstract method called.'
   end
 
-  def show_info(_attempts_numb, _hints_numb)
+  def show_info(attempts_numb, hints_numb)
     raise 'Abstract method called.'
   end
 
-  def show_result(_pluses_numb, _minuses_numb)
+  def show_result(pluses_numb, minuses_numb)
     raise 'Abstract method called.'
   end
 
-  def win_game(_flag)
+  def win_game
+    raise 'Abstract method called.'
+  end
+
+  def lose_game
     raise 'Abstract method called.'
   end
 end

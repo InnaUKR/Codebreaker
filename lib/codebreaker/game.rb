@@ -21,8 +21,7 @@ class Game
       difficulty_setting
       play
       propose_save
-      play_again = @ui.ask_phrase(:play_again)
-      break unless play_again == 'y'
+      break unless @ui.play_again?
     end
   end
 
@@ -50,28 +49,29 @@ class Game
       @attempts_numb -= 1
       propose_hint
       pluses_numb, minuses_numb = mark(get_guess_code)
-      return @ui.win_game(true) if pluses_numb == CODE_LENGTH
+      return @ui.win_game if pluses_numb == CODE_LENGTH
       @ui.show_result(pluses_numb, minuses_numb)
       break if @attempts_numb.zero?
     end
-    @ui.win_game(false)
+    @ui.lose_game
   end
 
   def propose_hint
     while @hints_numb > 0
-      break if @ui.ask_phrase(:hint_message) != 'y'
-      @ui.show_sentence(take_hint)
+      break unless @ui.take_hint?
+      hint = take_hint
+      @ui.show_hint(hint)
     end
   end
 
   def propose_save
-    return if @ui.ask_phrase(:ask_save) != 'y'
-    name = @ui.ask_phrase(:ask_name)
+    return until @ui.save?
+    name = @ui.ask_name
     @score.save_game(SCORES_FILE_PATH, name, self)
   end
 
   def get_guess_code
-    guess_string = @ui.ask_phrase(:enter_numbers)
+    guess_string = @ui.make_guess
     guess_code = guess_string.split('').map(&:to_i)
     get_guess_code unless guess_code.length == CODE_LENGTH &&
                           guess_code.all? { |number| RANGE_OF_NUMBERS.include?(number) }

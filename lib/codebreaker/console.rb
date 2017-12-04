@@ -15,10 +15,35 @@ class Console < UI
     gets.chomp
   end
 
+  def play_again?
+    ask_phrase(:play_again) == 'y'
+  end
+
+  def take_hint?
+    p ask_phrase(:hint_message) == 'y'
+  end
+
+  def save?
+    ask_phrase(:ask_save) == 'y'
+  end
+
+  def ask_name
+    ask_phrase(:ask_name)
+  end
+
+  def make_guess
+    ask_phrase(:enter_numbers)
+  end
+
+  def show_hint(hint)
+    puts hint
+  end
+
   def choose_difficulty
     show_sentence(@phrases[:choose_difficulty])
     @phrases[:difficulty].each { |x| puts x }
-    ask_phrase(:enter_difficulty)
+    puts @phrases[:enter_difficulty]
+    gets.chomp
   end
 
   def show_info(attempts_numb, hints_numb)
@@ -33,8 +58,11 @@ class Console < UI
     show_sentence minuses_numb.to_s + '-'
   end
 
-  def win_game(flag)
-    parameter = flag ? @phrases[:win] : @phrases[:lose]
-    show_sentence(parameter)
+  def win_game
+    show_sentence(@phrases[:win])
+  end
+
+  def lose_game
+    show_sentence(@phrases[:lose])
   end
 end

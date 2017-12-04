@@ -7,4 +7,5 @@ require_relative 'codebreaker/textFileScores'
 
 module Codebreaker
   # Your code goes here...
+  Game.new.start
 end
