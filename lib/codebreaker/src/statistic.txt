@@ -1,0 +1,2 @@
+Inna, hard, 4, 0
+inna, easy, 25, 0

@@ -1,23 +1,92 @@
-# module Codebreaker
 class Game
   CODE_LENGTH = 4
   RANGE_OF_NUMBERS = (1..6)
+  DIFFICULTY = {
+    easy: { attempts: 30, hints: 3 },
+    medium: { attempts: 15, hints: 2 },
+    hard: { attempts: 10, hints: 1 }
+  }.freeze
+  SCORES_FILE_PATH = 'lib/codebreaker/src/statistic.txt'.freeze
 
-  def initialize; end
+  attr_reader :difficulty, :attempts_numb, :hints_numb
 
-  def start
-    @secret_code = generate_secret_code
+  def initialize(ui = Console.new, score = TextFileScores.new)
+    @ui = ui
+    @score = score
   end
 
-  def guess(guess_string)
-    guess_code = guess_string.split('').map(&:to_i)
-    mark(guess_code) while @secret_code != guess_code
+  def start
+    loop do
+      generate_secret_code
+      difficulty_setting
+      play
+      propose_save
+      play_again = @ui.ask_phrase(:play_again)
+      break unless play_again == 'y'
+    end
   end
 
   private
 
   def generate_secret_code
-    Array.new(CODE_LENGTH) { Random.rand(RANGE_OF_NUMBERS) }
+    @secret_code = Array.new(CODE_LENGTH) { Random.rand(RANGE_OF_NUMBERS) }
+  end
+
+  def difficulty_setting
+    @difficulty = @ui.choose_difficulty
+    choose_difficulty
+  end
+
+  def choose_difficulty
+    level = DIFFICULTY[@difficulty.to_sym]
+    @attempts_numb = level[:attempts]
+    @hints_numb = level[:hints]
+    @gotten_hints = []
+  end
+
+  def play
+    loop do
+      @ui.show_info(@attempts_numb, @hints_numb)
+      @attempts_numb -= 1
+      propose_hint
+      pluses_numb, minuses_numb = mark(get_guess_code)
+      return @ui.win_game(true) if pluses_numb == CODE_LENGTH
+      @ui.show_result(pluses_numb, minuses_numb)
+      break if @attempts_numb.zero?
+    end
+    @ui.win_game(false)
+  end
+
+  def propose_hint
+    while @hints_numb > 0
+      break if @ui.ask_phrase(:hint_message) != 'y'
+      @ui.show_sentence(take_hint)
+    end
+  end
+
+  def propose_save
+    return if @ui.ask_phrase(:ask_save) != 'y'
+    name = @ui.ask_phrase(:ask_name)
+    @score.save_game(SCORES_FILE_PATH, name, self)
+  end
+
+  def get_guess_code
+    guess_string = @ui.ask_phrase(:enter_numbers)
+    guess_code = guess_string.split('').map(&:to_i)
+    get_guess_code unless guess_code.length == CODE_LENGTH &&
+                          guess_code.all? { |number| RANGE_OF_NUMBERS.include?(number) }
+    guess_code
+  end
+
+  def take_hint
+    index = nil
+    loop do
+      index = Random.rand(0...CODE_LENGTH)
+      break unless @gotten_hints.include?(index)
+    end
+    @gotten_hints << index
+    @hints_numb -= 1
+    @secret_code[index]
   end
 
   def mark(guess_code)
@@ -45,4 +114,3 @@ class Game
     end
   end
 end
-# end
